@@ -55,6 +55,7 @@ TRANSLATIONS = {
         "load_from_file_button": "Charger depuis un fichier",
         "paste_multiple_urls": "Coller plusieurs URLs",
         "add_urls": "Ajouter",
+        "max_concurrent_downloads": "Téléchargements simultanés max :",
 
         # ──────────────────────────────────────────────────────
         # CHAMPS ET LABELS
@@ -317,6 +318,7 @@ TRANSLATIONS = {
         "load_from_file_button": "Load from file",
         "paste_multiple_urls": "Paste multiple URLs",
         "add_urls": "Add",
+        "max_concurrent_downloads": "Max simultaneous downloads:",
 
         # ──────────────────────────────────────────────────────
         # FIELDS AND LABELS

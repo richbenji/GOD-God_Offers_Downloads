@@ -10,6 +10,7 @@ from .download_threads import InfoThread, DownloadThread
 from .utils import ask_output_folder, format_bytes_iec, ask_cookies_file
 from .url_resolver import resolve_url, UrlResolveError
 from .cookies_manager import update_cookies_path
+from .config_manager import get_max_concurrent, set_max_concurrent, MIN_MAX_CONCURRENT, MAX_MAX_CONCURRENT
 
 
 # optional imports for thumbnail; handled gracefully if absent
@@ -690,7 +691,11 @@ class SingleDownloadTab:
         self._finished_threads = 0  # terminés
         self.playlist_loading_frame = None
         self.first_video_loader_shown = False
+        self.max_concurrent = get_max_concurrent()   # téléchargements simultanés max
+        self._pending_threads = []                   # threads en attente de démarrage
+        self._running_count = 0                      # threads actuellement en cours
         self.build_ui()
+
 
     def build_ui(self):
         # Entrée URL + bouton "Vérifier"
@@ -739,7 +744,8 @@ class SingleDownloadTab:
         buttons_frame.grid_columnconfigure(0, weight=1)
         buttons_frame.grid_columnconfigure(1, weight=0)
         buttons_frame.grid_columnconfigure(2, weight=0)
-        buttons_frame.grid_columnconfigure(3, weight=1)
+        buttons_frame.grid_columnconfigure(3, weight=0)
+        buttons_frame.grid_columnconfigure(4, weight=1)
 
         # 🗑️ Bouton Vider la file
         self.clear_queue_btn = ctk.CTkButton(
@@ -760,6 +766,33 @@ class SingleDownloadTab:
             width=300
         )
         self.download_btn.grid(row=0, column=1, pady=10)
+
+        # 🔢 Nombre de téléchargements simultanés max
+        self.max_concurrent_frame = ctk.CTkFrame(buttons_frame, fg_color="transparent")
+        self.max_concurrent_frame.grid(row=0, column=3, padx=10, pady=10)
+
+        self.max_concurrent_label = ctk.CTkLabel(
+            self.max_concurrent_frame,
+            text=get_text("max_concurrent_downloads", self.app.current_language)
+        )
+        self.max_concurrent_label.pack(side="left", padx=(0, 6))
+
+        self.max_concurrent_minus_btn = ctk.CTkButton(
+            self.max_concurrent_frame, text="−", width=30,
+            command=lambda: self._change_max_concurrent(-1)
+        )
+        self.max_concurrent_minus_btn.pack(side="left")
+
+        self.max_concurrent_value_label = ctk.CTkLabel(
+            self.max_concurrent_frame, text=str(self.max_concurrent), width=36
+        )
+        self.max_concurrent_value_label.pack(side="left")
+
+        self.max_concurrent_plus_btn = ctk.CTkButton(
+            self.max_concurrent_frame, text="+", width=30,
+            command=lambda: self._change_max_concurrent(+1)
+        )
+        self.max_concurrent_plus_btn.pack(side="left")
 
         # Progression + statut
         self.single_status_label = ctk.CTkLabel(self.parent, text=get_text("ready_status", self.app.current_language))
@@ -835,6 +868,10 @@ class SingleDownloadTab:
 
         # Bouton "Vider la queue"
         self.clear_queue_btn.configure(text="🗑️ " + get_text("clear_queue", self.app.current_language))
+
+        self.max_concurrent_label.configure(
+            text=get_text("max_concurrent_downloads", self.app.current_language)
+        )
 
 
     def show_placeholder(self):
@@ -1187,6 +1224,27 @@ class SingleDownloadTab:
             state="normal" if not self.is_downloading else "normal"
         )
 
+    def _change_max_concurrent(self, delta):
+        """Si tu diminues la valeur en cours de route, les téléchargements déjà lancés continuent.
+        La nouvelle limite s’applique aux démarrages suivants."""
+        new_value = max(MIN_MAX_CONCURRENT, min(MAX_MAX_CONCURRENT, self.max_concurrent + delta))
+        if new_value == self.max_concurrent:
+            return
+        self.max_concurrent = new_value
+        self.max_concurrent_value_label.configure(text=str(new_value))
+        set_max_concurrent(new_value)
+        # Si on augmente pendant un téléchargement, on lance tout de suite les suivants
+        self._start_next_threads()
+
+    def _start_next_threads(self):
+        """Lance des threads en attente tant qu'on est sous la limite."""
+        while (self.is_downloading
+               and self._pending_threads
+               and self._running_count < self.max_concurrent):
+            thread = self._pending_threads.pop(0)
+            self._running_count += 1
+            thread.start()
+
     def start_download_all(self):
         """Démarre tous les téléchargements et transforme le bouton en 'Annuler'."""
 
@@ -1206,6 +1264,8 @@ class SingleDownloadTab:
         self._expected_threads = len(self.video_frames)
 
         self.active_threads.clear()
+        self._pending_threads = []
+        self._running_count = 0
         self._thread_progress.clear()
         self.is_downloading = True
 
@@ -1283,9 +1343,13 @@ class SingleDownloadTab:
             self.active_threads.append(thread)
 
             thread.daemon = True
-            thread.start()
+            self._pending_threads.append(thread)
+
+        self._start_next_threads()
 
     def cancel_downloads(self):
+        self._pending_threads.clear()
+        self._running_count = 0
         # Annuler les threads
         for t in self.active_threads:
             try:
@@ -1364,11 +1428,16 @@ class SingleDownloadTab:
         if not self.is_downloading:
             return  # ⛔ thread terminé après annulation → on ignore
 
+        if thread not in self.active_threads:   # reliquat d'un lot annulé
+            return
+        self._running_count = max(0, self._running_count - 1)
+
         self._download_results.append(success)
         if not success:
             self._failed_downloads.append(video_title or "Titre inconnu")
         self._thread_progress[thread] = 100
         self.clear_queue_btn.configure(state="normal" if self.video_frames else "disabled")
+        self._start_next_threads()
 
         # Tous les téléchargements sont terminés
         if len(self._download_results) == self._expected_threads:

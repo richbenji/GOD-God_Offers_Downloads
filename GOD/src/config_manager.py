@@ -39,3 +39,21 @@ def set_cookies_path(path: str | None):
         cfg.pop("cookies_source", None)
 
     save_config(cfg)
+
+DEFAULT_MAX_CONCURRENT = 4
+MIN_MAX_CONCURRENT = 1
+MAX_MAX_CONCURRENT = 10
+
+
+def get_max_concurrent():
+    try:
+        value = int(load_config().get("max_concurrent_downloads", DEFAULT_MAX_CONCURRENT))
+    except (TypeError, ValueError):
+        value = DEFAULT_MAX_CONCURRENT
+    return max(MIN_MAX_CONCURRENT, min(MAX_MAX_CONCURRENT, value))
+
+
+def set_max_concurrent(value: int):
+    cfg = load_config()
+    cfg["max_concurrent_downloads"] = int(value)
+    save_config(cfg)

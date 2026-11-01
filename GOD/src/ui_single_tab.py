@@ -694,6 +694,8 @@ class SingleDownloadTab:
         self.max_concurrent = get_max_concurrent()   # téléchargements simultanés max
         self._pending_threads = []                   # threads en attente de démarrage
         self._running_count = 0                      # threads actuellement en cours
+        self._info_pending = []   # (url, loading_frame) en attente d'extraction
+        self._info_running = 0    # extractions d'infos en cours
         self.build_ui()
 
 
@@ -961,17 +963,42 @@ class SingleDownloadTab:
         )
 
     def _start_info_thread(self, video_url, loading_frame):
-        """Lance (ou relance après ajout de cookies) un InfoThread pour une URL donnée."""
+        """Met une extraction d'infos en file d'attente (limitée par max_concurrent).
+        Utilisé aussi pour relancer après ajout de cookies."""
+        self._info_pending.append((video_url, loading_frame))
+        self._start_next_info_threads()
+
+    def _start_next_info_threads(self):
+        """Lance des extractions en attente tant qu'on est sous la limite."""
+        while self._info_pending and self._info_running < self.max_concurrent:
+            video_url, loading_frame = self._info_pending.pop(0)
+            self._info_running += 1
+            self._launch_info_thread(video_url, loading_frame)
+
+    def _launch_info_thread(self, video_url, loading_frame):
+        state = {"released": False}
+
+        def release():
+            # Libère un emplacement une seule fois, puis lance la suivante
+            if not state["released"]:
+                state["released"] = True
+                self._info_running = max(0, self._info_running - 1)
+                self._start_next_info_threads()
+
+        def on_ok(info):
+            release()
+            self.on_info_received(info, loading_frame)
+
+        def on_err(err_key):
+            release()
+            self.on_info_error(err_key, loading_frame, video_url)
+
         thread = InfoThread(
             video_url,
             self.app,
             cookies_path=self.app.cookies_path,
-            callback=lambda info, lf=loading_frame: self.app.after(
-                0, lambda i=info, f=lf: self.on_info_received(i, f)
-            ),
-            error_callback=lambda err_key, lf=loading_frame, u=video_url: self.app.after(
-                0, lambda e=err_key, f=lf, uu=u: self.on_info_error(e, f, uu)
-            )
+            callback=lambda info: self.app.after(0, on_ok, info),
+            error_callback=lambda err_key: self.app.after(0, on_err, err_key)
         )
         thread.daemon = True
         thread.start()
@@ -1235,6 +1262,7 @@ class SingleDownloadTab:
         set_max_concurrent(new_value)
         # Si on augmente pendant un téléchargement, on lance tout de suite les suivants
         self._start_next_threads()
+        self._start_next_info_threads()
 
     def _start_next_threads(self):
         """Lance des threads en attente tant qu'on est sous la limite."""

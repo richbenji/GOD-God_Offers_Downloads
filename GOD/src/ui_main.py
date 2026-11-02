@@ -6,6 +6,7 @@ from .ui_single_tab import SingleDownloadTab
 from .ui_batch_tab import BatchDownloadTab
 from .cookies_manager import init_cookies, update_cookies_path
 from .ui_tutorial_tab import TutorialTab
+from .console_panel import ConsolePanel
 from .ui_tutorial_tabV2 import TutorialTabV2
 
 
@@ -56,6 +57,7 @@ class YouTubeDownloader(ctk.CTk):
 
         # Interface
         self.setup_header()
+        self.setup_console()
         self.setup_tabs()
 
     def setup_header(self):
@@ -149,6 +151,10 @@ class YouTubeDownloader(ctk.CTk):
         if logo_image:
             logo_label = ctk.CTkLabel(header_frame, image=logo_image, text="")
             logo_label.grid(row=0, column=2, sticky="nse", padx=10, pady=10)
+
+    def setup_console(self):
+        self.console = ConsolePanel(self)
+        self.console.pack(side="bottom", fill="x", padx=10, pady=(0, 10))
 
     def setup_tabs(self):
         self.tabview = ctk.CTkTabview(self)

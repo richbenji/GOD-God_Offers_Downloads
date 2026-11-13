@@ -1,4 +1,5 @@
 import os
+from PIL import Image, ImageTk
 import customtkinter as ctk
 from .translations import get_text
 from .utils import load_custom_font, load_logo_image, ask_cookies_file
@@ -7,17 +8,22 @@ from .ui_batch_tab import BatchDownloadTab
 from .cookies_manager import init_cookies, update_cookies_path
 from .ui_tutorial_tab import TutorialTab
 from .console_panel import ConsolePanel
+from .paths import resource_path
 from .ui_tutorial_tabV2 import TutorialTabV2
 
 
 
 class YouTubeDownloader(ctk.CTk):
     def __init__(self):
-        super().__init__()
-
-        #self.cookies_path = str(COOKIES_FILE) if COOKIES_FILE.exists() else None
-        #cookies = get_cookies_path()
-        #self.cookies_path = cookies if cookies and Path(cookies).exists() else None
+        super().__init__(className="GOD")
+        # Icône de la fenêtre (à placer juste après le super().__init__)
+        try:
+            icon_img = Image.open(resource_path("assets/logos/GOD.png")).convert("RGBA")
+            icon_img = icon_img.resize((64, 64), Image.Resampling.LANCZOS)
+            self._window_icon = ImageTk.PhotoImage(icon_img)
+            self.iconphoto(True, self._window_icon)
+        except Exception as e:
+            print(f"Impossible de charger l'icône de la fenêtre : {e}")
         self.cookies_path = init_cookies()
 
 

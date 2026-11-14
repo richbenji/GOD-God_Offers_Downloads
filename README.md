@@ -111,7 +111,7 @@ Compare the result with the SHA256 checksum published in the release. It must me
 
 ### 🐧 Linux (Recommended: AppImage)
 
-**Method 1: AppImage (no installation required)**
+**Method 1: from AppImage**
 
 ```bash
 # Download the latest release
@@ -122,9 +122,28 @@ chmod +x GOD-x86_64.AppImage
 
 # Run the application (or double-click on the application)
 ./GOD-x86_64.AppImage
+
+# Add the icon application in the launcher/dock
+./install-appimage.sh GOD-x86_64.AppImage 
 ```
 
-**Method 2: From source**
+**Method 2: from binary**
+
+```bash
+# Download the latest release
+wget https://github.com/richbenji/GOD-God-Offers-Downloads-Graphical-Omnipotent-Downloader-/releases/latest/download/GOD-x86_64.AppImage
+
+# Make it executable
+chmod +x GOD
+
+# Run the application (or double-click on the application)
+./GOD
+
+# Add the icon application in the launcher/dock
+./install-binary.sh GOD-x86_64.AppImage  
+```
+
+**Method 3: from source**
 
 ```bash
 # Clone the repository
@@ -140,6 +159,32 @@ pip install -r requirements.txt
 
 # Run the application
 python GOD/main.py
+```
+
+**Method 4: Build the AppImage yourself**
+
+> Make sure `~/.local/bin` is in your `PATH`. The build must be run inside the virtual environment (PyInstaller has to find the project's dependencies). To use the AppImage on older distributions, build it on the oldest one you target.
+
+```bash
+# Clone the repository
+git clone https://github.com/richbenji/GOD-God_Offers_Downloads.git
+cd GOD-God_Offers_Downloads
+
+# Create a virtual environment and install the dependencies
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Install appimagetool (it is itself an AppImage)
+mkdir -p ~/.local/bin
+wget -O ~/.local/bin/appimagetool https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+chmod +x ~/.local/bin/appimagetool
+
+# Build: downloads deno, runs PyInstaller, then packages the AppImage
+bash scripts/build_appimage.sh
+
+# The result is in the project folder
+./GOD-x86_64.AppImage
 ```
 
 ### 🪟 Windows

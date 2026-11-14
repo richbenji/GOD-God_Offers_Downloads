@@ -3,6 +3,8 @@ set -e
 
 cd "$(dirname "$0")/.."
 
+source venv/bin/activate
+
 APP_NAME="GOD"
 ARCH="x86_64"
 ICON_NAME="GOD.png"

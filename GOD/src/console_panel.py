@@ -62,7 +62,7 @@ install_capture()
 
 class ConsolePanel(ctk.CTkFrame):
     MIN_HEIGHT = 80
-    DEFAULT_HEIGHT = 180
+    DEFAULT_HEIGHT = 60
     POLL_MS = 100
     MAX_ITEMS_PER_TICK = 2000
 

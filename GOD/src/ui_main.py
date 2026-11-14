@@ -161,6 +161,7 @@ class YouTubeDownloader(ctk.CTk):
     def setup_console(self):
         self.console = ConsolePanel(self)
         self.console.pack(side="bottom", fill="x", padx=10, pady=(0, 10))
+        self.console.set_expanded(True)   # ← à ajouter : console dépliée au démarrage
 
     def setup_tabs(self):
         self.tabview = ctk.CTkTabview(self)

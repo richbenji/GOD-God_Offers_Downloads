@@ -187,6 +187,7 @@ TRANSLATIONS = {
         "load_from_file_button": "Kargañ diouzh ur restr",
         "paste_multiple_urls": "Pegañ meur a URL",
         "add_urls": "Ouzhpennañ",
+        "max_concurrent_downloads": "Pellgargadennoù war un dro (muiañ):",
 
         # ──────────────────────────────────────────────────────
         # MAEZIOÙ HA SKRIVELLOÙ
@@ -450,6 +451,7 @@ TRANSLATIONS = {
         "load_from_file_button": "Cargar desde archivo",
         "paste_multiple_urls": "Pegar varias URLs",
         "add_urls": "Añadir",
+        "max_concurrent_downloads": "Descargas simultáneas máx.:",
 
         # ──────────────────────────────────────────────────────
         # CAMPOS Y ETIQUETAS
@@ -581,6 +583,7 @@ TRANSLATIONS = {
         "load_from_file_button": "Carica da file",
         "paste_multiple_urls": "Incolla più URL",
         "add_urls": "Aggiungi",
+        "max_concurrent_downloads": "Download simultanei max:",
 
         # ──────────────────────────────────────────────────────
         # CAMPI ED ETICHETTE
@@ -712,6 +715,7 @@ TRANSLATIONS = {
         "load_from_file_button": "Aus Datei laden",
         "paste_multiple_urls": "Mehrere URLs einfügen",
         "add_urls": "Hinzufügen",
+        "max_concurrent_downloads": "Max. gleichzeitige Downloads:",
 
         # ──────────────────────────────────────────────────────
         # FELDER UND BESCHRIFTUNGEN
@@ -843,6 +847,7 @@ TRANSLATIONS = {
         "load_from_file_button": "Carregar de um arquivo",
         "paste_multiple_urls": "Colar várias URLs",
         "add_urls": "Adicionar",
+        "max_concurrent_downloads": "Downloads simultâneos máx.:",
 
         # ──────────────────────────────────────────────────────
         # CAMPOS E RÓTULOS
@@ -974,6 +979,7 @@ TRANSLATIONS = {
         "load_from_file_button": "Φόρτωση από αρχείο",
         "paste_multiple_urls": "Επικόλληση πολλών URL",
         "add_urls": "Προσθήκη",
+        "max_concurrent_downloads": "Μέγιστες ταυτόχρονες λήψεις:",
 
         # ──────────────────────────────────────────────────────
         # שדות ותוויות
@@ -1105,6 +1111,7 @@ TRANSLATIONS = {
         "load_from_file_button": "Загрузить из файла",
         "paste_multiple_urls": "Вставить несколько URL",
         "add_urls": "Добавить",
+        "max_concurrent_downloads": "Макс. одновременных загрузок:",
 
         # ──────────────────────────────────────────────────────
         # ПОЛЯ И МЕТКИ
@@ -1236,6 +1243,7 @@ TRANSLATIONS = {
         "load_from_file_button": "ファイルから読み込む",
         "paste_multiple_urls": "複数のURLを貼り付け",
         "add_urls": "追加",
+        "max_concurrent_downloads": "最大同時ダウンロード数：",
 
         # ──────────────────────────────────────────────────────
         # フィールドとラベル
@@ -1367,6 +1375,7 @@ TRANSLATIONS = {
         "load_from_file_button": "从文件加载",
         "paste_multiple_urls": "粘贴多个URL",
         "add_urls": "添加",
+        "max_concurrent_downloads": "最大同时下载数：",
 
         # ──────────────────────────────────────────────────────
         # 字段和标签
@@ -1498,6 +1507,7 @@ TRANSLATIONS = {
         "load_from_file_button": "파일에서 불러오기",
         "paste_multiple_urls": "여러 URL 붙여넣기",
         "add_urls": "추가",
+        "max_concurrent_downloads": "최대 동시 다운로드 수:",
 
         # ──────────────────────────────────────────────────────
         # 필드 및 레이블
@@ -1629,6 +1639,7 @@ TRANSLATIONS = {
         "load_from_file_button": "Wczytaj z pliku",
         "paste_multiple_urls": "Wklej wiele URL",
         "add_urls": "Dodaj",
+        "max_concurrent_downloads": "Maks. jednoczesnych pobrań:",
 
         # ──────────────────────────────────────────────────────
         # POLA I ETYKIETY
@@ -1760,6 +1771,7 @@ TRANSLATIONS = {
         "load_from_file_button": "טעינה מקובץ",
         "paste_multiple_urls": "הדבקת מספר כתובות",
         "add_urls": "הוספה",
+        "max_concurrent_downloads": "מקסימום הורדות במקביל:",
 
         # ──────────────────────────────────────────────────────
         # ΠΕΔΙΑ ΚΑΙ ΕΤΙΚΕΤΕΣ
@@ -1891,6 +1903,7 @@ TRANSLATIONS = {
         "load_from_file_button": "تحميل من ملف",
         "paste_multiple_urls": "لصق عدة روابط",
         "add_urls": "إضافة",
+        "max_concurrent_downloads": "الحد الأقصى للتنزيلات المتزامنة:",
 
         # ──────────────────────────────────────────────────────
         # الحقول والتسميات

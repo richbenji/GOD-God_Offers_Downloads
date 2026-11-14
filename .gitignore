@@ -146,3 +146,4 @@ getting_bitrates.py
 
 GOD-x86_64.AppImage
 AppDir/usr/bin/
+/GOD/resources/runtime/

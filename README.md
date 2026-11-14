@@ -113,42 +113,48 @@ Compare the result with the SHA256 checksum published in the release. It must me
 
 **Method 1: from AppImage**
 
+\> AppImages need FUSE 2 on some distributions (`libfuse2` on Ubuntu/Kubuntu, `fuse2` on Arch/Manjaro, `fuse-libs` on Fedora). If it does not start, try `./GOD-x86_64.AppImage --appimage-extract-and-run`, or use Method 2.
+
 ```bash
 # Download the latest release
-wget https://github.com/richbenji/GOD-God-Offers-Downloads-Graphical-Omnipotent-Downloader-/releases/latest/download/GOD-x86_64.AppImage
+wget https://github.com/richbenji/GOD-God_Offers_Downloads/releases/latest/download/GOD-x86_64.AppImage
 
 # Make it executable
 chmod +x GOD-x86_64.AppImage
 
-# Run the application (or double-click on the application)
+# Run the application (or double-click on it)
 ./GOD-x86_64.AppImage
 
-# Add the icon application in the launcher/dock
-./install-appimage.sh GOD-x86_64.AppImage 
+# (Optional) Add GOD to your application launcher
+wget https://raw.githubusercontent.com/richbenji/GOD-God_Offers_Downloads/main/install-appimage.sh
+bash install-appimage.sh GOD-x86_64.AppImage
 ```
 
 **Method 2: from binary**
 
+> If you already have an installation with a binary file, just replace the binary file by the new one.
+
 ```bash
 # Download the latest release
-wget https://github.com/richbenji/GOD-God-Offers-Downloads-Graphical-Omnipotent-Downloader-/releases/latest/download/GOD-x86_64.AppImage
+wget https://github.com/richbenji/GOD-God_Offers_Downloads/releases/latest/download/GOD-linux-x86_64.tar.gz
 
-# Make it executable
-chmod +x GOD
+# Extract it
+tar xzf GOD-linux-x86_64.tar.gz
+cd GOD-linux
 
-# Run the application (or double-click on the application)
+# Run the application (or double-click on GOD)
 ./GOD
 
-# Add the icon application in the launcher/dock
-./install-binary.sh GOD-x86_64.AppImage  
+# (Optional) Add GOD to your application launcher
+bash install-binary.sh
 ```
 
 **Method 3: from source**
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/GOD.git
-cd GOD
+git clone https://github.com/richbenji/GOD-God_Offers_Downloads.git
+cd GOD-God_Offers_Downloads
 
 # Create a virtual environment
 python3 -m venv venv
@@ -156,6 +162,9 @@ source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Download the JavaScript runtime (deno) used by yt-dlp
+python scripts/fetch_runtime.py
 
 # Run the application
 python GOD/main.py
